@@ -20,7 +20,6 @@ namespace shiva::event
         {
         }
 
-        [[deprecated]]
         key_pressed(shiva::input::keyboard::TKey key,
             bool alt_,
             bool control_,

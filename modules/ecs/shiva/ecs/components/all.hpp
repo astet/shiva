@@ -22,6 +22,7 @@ namespace shiva::ecs
         layer_6,
         layer_7,
         layer_8,
+        hud_layer,
         drawable,
         animation,
         lua_script,

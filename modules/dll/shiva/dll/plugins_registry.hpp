@@ -60,7 +60,7 @@ namespace shiva::helpers
          * loaded.
          */
         inline explicit plugins_registry(shiva::fs::path &&plugins_directory,
-                                         const std::string library_pattern_matching) noexcept;
+                                         std::string library_pattern_matching) noexcept;
 
         //! Public member functions
 
@@ -120,8 +120,8 @@ namespace shiva::helpers
     //! Constructor
     template <typename CreatorSignature>
     plugins_registry<CreatorSignature>::plugins_registry(shiva::fs::path &&plugins_directory,
-                                                         const std::string library_pattern_matching) noexcept :
-        plugins_directory_{plugins_directory},
+                                                         std::string library_pattern_matching) noexcept :
+        plugins_directory_{std::move(plugins_directory)},
         plugins_library_pattern_matching_{std::move(library_pattern_matching)}
     {
         log_->info("plugins_registry directory: {}", plugins_directory.string());

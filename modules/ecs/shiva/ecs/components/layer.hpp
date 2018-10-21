@@ -128,4 +128,19 @@ namespace shiva::ecs
             return meta::makeMap();
         }
     };
+
+    struct hud_layer
+    {
+        reflect_class(hud_layer)
+
+        static constexpr auto reflected_functions() noexcept
+        {
+            return meta::makeMap();
+        }
+
+        static constexpr auto reflected_members() noexcept
+        {
+            return meta::makeMap();
+        }
+    };
 }

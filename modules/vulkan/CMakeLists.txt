@@ -1,0 +1,8 @@
+if (SHIVA_USE_VULKAN_AS_RENDERER)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeSources.cmake)
+    set(MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+    find_package(Vulkan REQUIRED)
+    CREATE_MODULE(shiva::vulkan "${MODULE_SOURCES}" ${MODULE_PATH})
+    target_link_libraries(vulkan INTERFACE shiva::graphics)
+    AUTO_TARGETS_MODULE_INSTALL(vulkan)
+endif ()
