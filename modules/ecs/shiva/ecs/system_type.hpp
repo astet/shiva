@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <chrono>
-
 #include <shiva/meta/named_type.hpp>
 
 namespace shiva::ecs
@@ -28,6 +26,8 @@ namespace shiva::ecs
         size,
     };
 
+    constexpr size_t system_count = static_cast<std::underlying_type_t<system_type>>(system_type::size);
+
     /**
      * \typedef strong type of system_type::pre_update
      */
@@ -44,6 +44,4 @@ namespace shiva::ecs
      * \typedef strong type of system_type::logic_update
      */
     using system_logic_update = fluent::NamedType<system_type, struct system_logic_update_tag>;
-
-    using delta_t = std::chrono::duration<float>;
 }

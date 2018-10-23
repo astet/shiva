@@ -297,6 +297,14 @@ namespace shiva::scripting
         catch (const std::exception &error) {
             this->log_->error("lua error: {}", error.what());
         }
+
+//        dispatcher_.trigger<shiva::event::add_base_system>(
+//            std::make_unique<shiva::ecs::details::lua_scripted_system<sys_type>>(dispatcher_, entity_registry_,
+//                                                                                 fixed_delta_time_, state_,
+//                                                                                 table_name,
+//                                                                                 script_name.filename().stem().string()),
+//                prioritize, system_to_swap);
+
         switch (sys_type) {
             case shiva::ecs::post_update:
                 dispatcher_.trigger<shiva::event::add_base_system>(

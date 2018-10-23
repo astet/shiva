@@ -7,6 +7,7 @@
 #include <shiva/spdlog/spdlog.hpp>
 #include <shiva/ecs/base_system.hpp>
 #include <shiva/ecs/details/system_type_traits.hpp>
+#include <shiva/meta/tuple_for_each.hpp>
 #include <shiva/entt/entt_config.hpp>
 
 namespace shiva::ecs
@@ -18,13 +19,13 @@ namespace shiva::ecs
      * \inherit base_system
      * \note This class is the class that you have to inherit to create your systems
      */
-    template <typename TSystemDerived, typename TSystemType>
+    template <typename TSystemDerived, system_type type>
     class system : public base_system
     {
     private:
-        //! Private typedefs
-        template <typename T>
-        using is_kind_system = std::is_same<TSystemType, T>;
+//        //! Private typedefs
+//        template <typename T>
+//        using is_kind_system = std::is_same<type, T>;
     public:
         //! Constructors
 
@@ -92,7 +93,7 @@ namespace shiva::ecs
      * \endcode
      */
     template <typename TSystemDerived>
-    using logic_update_system = system<TSystemDerived, system_logic_update>;
+    using logic_update_system = system<TSystemDerived, system_type::logic_update>;
 
 
     /**
@@ -106,7 +107,7 @@ namespace shiva::ecs
      * \endcode
      */
     template <typename TSystemDerived>
-    using pre_update_system = system<TSystemDerived, system_pre_update>;
+    using pre_update_system = system<TSystemDerived, system_type::pre_update>;
 
     /**
      * \typedef post_update_system
@@ -119,15 +120,15 @@ namespace shiva::ecs
      * \endcode
      */
     template <typename TSystemDerived>
-    using post_update_system = system<TSystemDerived, system_post_update>;
+    using post_update_system = system<TSystemDerived, system_type::post_update>;
 }
 
 namespace shiva::ecs
 {
     //! Constructors
-    template <typename TSystemDerived, typename TSystemType>
+    template <typename TSystemDerived, system_type type>
     template <typename... TArgs>
-    system<TSystemDerived, TSystemType>::system(TArgs &&... args) noexcept : base_system(std::forward<TArgs>(args)...),
+    system<TSystemDerived, type>::system(TArgs &&... args) noexcept : base_system(std::forward<TArgs>(args)...),
                                                                              log_{shiva::log::stdout_color_mt(
                                                                                  TSystemDerived::class_name())}
     {
@@ -141,8 +142,8 @@ namespace shiva::ecs
         }
     }
 
-    template <typename TSystemDerived, typename TSystemType>
-    system<TSystemDerived, TSystemType>::system(shiva::entt::dispatcher &dispatcher,
+    template <typename TSystemDerived, system_type type>
+    system<TSystemDerived, type>::system(shiva::entt::dispatcher &dispatcher,
                                                 shiva::entt::entity_registry &entity_registry,
                                                 const float &fixed_delta_time, std::string class_name) noexcept
         : base_system(dispatcher, entity_registry, fixed_delta_time),
@@ -151,38 +152,39 @@ namespace shiva::ecs
     }
 
     //! Destructor
-    template <typename TSystemDerived, typename TSystemType>
-    system<TSystemDerived, TSystemType>::~system() noexcept
+    template <typename TSystemDerived, system_type type>
+    system<TSystemDerived, type>::~system() noexcept
     {
         log_->debug("dropping {} logger", log_->name());
         spdlog::drop(log_->name());
     }
 
     //! Public static functions
-    template <typename TSystemDerived, typename TSystemType>
-    constexpr system_type system<TSystemDerived, TSystemType>::get_system_type() noexcept
+    template <typename TSystemDerived, system_type type>
+    constexpr system_type system<TSystemDerived, type>::get_system_type() noexcept
     {
-        using is_same_list = meta::list::Transform<details::valid_systems_list, is_kind_system>;
-        static_assert(details::is_valid_system_v(is_same_list{}),
-                      "valid_system_list is an invalid template parameter");
-        if constexpr (std::is_same_v<TSystemType, system_logic_update>) {
-            return system_type::logic_update;
-        } else if constexpr (std::is_same_v<TSystemType, system_pre_update>)
-            return system_type::pre_update;
-        else if constexpr (std::is_same_v<TSystemType, system_post_update>)
-            return system_type::post_update;
-        return system_type::size;
+        return type;
+//        using is_same_list = meta::list::Transform<details::valid_systems_list, is_kind_system>;
+//        static_assert(details::is_valid_system_v(is_same_list{}),
+//                      "valid_system_list is an invalid template parameter");
+//        if constexpr (std::is_same_v<TSystemType, system_logic_update>) {
+//            return system_type::logic_update;
+//        } else if constexpr (std::is_same_v<TSystemType, system_pre_update>)
+//            return system_type::pre_update;
+//        else if constexpr (std::is_same_v<TSystemType, system_post_update>)
+//            return system_type::post_update;
+//        return system_type::size;
     }
 
     //! Public member functions overriden
-    template <typename TSystemDerived, typename TSystemType>
-    const std::string &system<TSystemDerived, TSystemType>::get_name() const noexcept
+    template <typename TSystemDerived, system_type type>
+    const std::string &system<TSystemDerived, type>::get_name() const noexcept
     {
         return TSystemDerived::class_name();
     }
 
-    template <typename TSystemDerived, typename TSystemType>
-    system_type system<TSystemDerived, TSystemType>::get_system_type_RTTI() const noexcept
+    template <typename TSystemDerived, system_type type>
+    system_type system<TSystemDerived, type>::get_system_type_RTTI() const noexcept
     {
         return system::get_system_type();
     }

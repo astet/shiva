@@ -4,20 +4,19 @@
 
 #pragma once
 
-#include <shiva/dll/plugin.hpp>
+#include <shiva/graphics/renderer.hpp>
 #include <shiva/reflection/reflection.hpp>
 
 namespace shiva::vulkan
 {
-    class renderer final : public shiva::plugins::<renderer>
+    class renderer final : public shiva::graphics::renderer
     {
+        class impl;
     public:
         renderer() noexcept;
 
         //! Public static functions
-        static std::unique_ptr<shiva::plugins::render_system> create(entt::dispatcher &dispatcher,
-                                                               entt::entity_registry &registry,
-                                                               const float &fixed_delta_time) noexcept;
+        static std::unique_ptr<shiva::graphics::renderer> create() noexcept;
 
         //! Public member functions overriden
         void update() noexcept final;
@@ -30,6 +29,6 @@ namespace shiva::vulkan
         static constexpr auto reflected_members() noexcept;
 
     private:
-
+        std::unique_ptr<impl> impl_;
     };
 }
