@@ -49,29 +49,31 @@ if (SHIVA_BUILD_EDITOR AND SHIVA_USE_IMGUI)
     add_subdirectory(editor)
 endif()
 
+##! main library
+add_library(shiva INTERFACE)
+
 if (USE_TINYREFL_FOR_REFLECTION)
     include(ExternalProject)
+    message("GIT_EXECUTABLE "  ${GIT_EXECUTABLE})
     ExternalProject_Add(
             tinyrefl
 
             GIT_REPOSITORY "https://gitlab.com/Manu343726/tinyrefl.git"
-#            GIT_TAG "master"
+            GIT_TAG "master"
 
-#            UPDATE_COMMAND ""
-#            PATCH_COMMAND ""
+            UPDATE_COMMAND ""
+            PATCH_COMMAND ""
 
             SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/tinyrefl"
-#            CMAKE_ARGS -DTINYREFL_USE_LOCAL_LLVM=ON -DCMAKE_INSTALL_PREFIX=${GLOBAL_OUTPUT_PATH}/tinyrefl
+            CMAKE_ARGS -DTINYREFL_USE_LOCAL_LLVM=ON -DCMAKE_INSTALL_PREFIX=${GLOBAL_OUTPUT_PATH}/tinyrefl
 
-#            TEST_COMMAND ""
+            TEST_COMMAND ""
             LOG_DOWNLOAD ON
     )
     ExternalProject_Get_Property(tinyrefl SOURCE_DIR)
 #    add_subdirectory(thirdparty/tinyrefl)
+    add_dependencies(shiva tinyrefl)
 endif()
-
-##! main library
-add_library(shiva INTERFACE)
 
 add_library(shiva::shiva ALIAS shiva)
 target_link_libraries(shiva INTERFACE
