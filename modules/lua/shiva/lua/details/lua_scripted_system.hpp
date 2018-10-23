@@ -75,13 +75,6 @@ namespace shiva::ecs::details
     using lua_post_scripted_system = lua_scripted_system<shiva::ecs::system_type::post_update>;
     using lua_pre_scripted_system = lua_scripted_system<shiva::ecs::system_type::pre_update>;
     using lua_logic_scripted_system = lua_scripted_system<shiva::ecs::system_type::logic_update>;
-
-    using lua_systems_list = meta::type_list<lua_pre_scripted_system, lua_logic_scripted_system, lua_post_scripted_system>;
-
-    template <typename TTuple>
-    auto create_scripted_system() {
-        
-    }
 }
 
 namespace shiva::ecs::details

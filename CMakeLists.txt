@@ -25,6 +25,7 @@ option(SHIVA_INSTALL_PLUGINS "Build shiva with SFML rendering" OFF)
 option(DISABLE_INSTALL_SHIVA_CORE "Disable install main targets" OFF)
 option(USE_PROJECT_IN_AN_IDE "Workaround for install header only library option, put it to ON if u use CLION" OFF)
 option(SHIVA_BUILD_EDITOR "Shiva build editor" OFF)
+option(USE_TINYREFL_FOR_REFLECTION "Use tinyrefl for reflection" ON)
 
 
 ##! CMake Path
@@ -46,6 +47,27 @@ endif ()
 
 if (SHIVA_BUILD_EDITOR AND SHIVA_USE_IMGUI)
     add_subdirectory(editor)
+endif()
+
+if (USE_TINYREFL_FOR_REFLECTION)
+    include(ExternalProject)
+    ExternalProject_Add(
+            tinyrefl
+
+            GIT_REPOSITORY "https://gitlab.com/Manu343726/tinyrefl.git"
+#            GIT_TAG "master"
+
+#            UPDATE_COMMAND ""
+#            PATCH_COMMAND ""
+
+            SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/tinyrefl"
+#            CMAKE_ARGS -DTINYREFL_USE_LOCAL_LLVM=ON -DCMAKE_INSTALL_PREFIX=${GLOBAL_OUTPUT_PATH}/tinyrefl
+
+#            TEST_COMMAND ""
+            LOG_DOWNLOAD ON
+    )
+    ExternalProject_Get_Property(tinyrefl SOURCE_DIR)
+#    add_subdirectory(thirdparty/tinyrefl)
 endif()
 
 ##! main library
