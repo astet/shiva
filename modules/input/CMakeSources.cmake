@@ -6,6 +6,7 @@ set(MODULE_PUBLIC_HEADERS
         "${MODULE_PATH}/keyboard.hpp"
         "${MODULE_PATH}/mouse.hpp"
         "${MODULE_PATH}/gamepad.hpp"
+        "${MODULE_PATH}/action_map.hpp"
         )
 
 set(MODULE_PRIVATE_HEADERS
