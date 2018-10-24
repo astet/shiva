@@ -6,6 +6,8 @@
 
 #include <memory>
 
+#include <shiva/ecs/system.hpp>
+
 namespace shiva::systems
 {
 class render_system final : public shiva::ecs::post_update_system<render_system>
@@ -41,8 +43,8 @@ private:
     void reload_json_configuration_() noexcept;
 
     //! Private data members
-    shiva::sfml::window_config cfg_;
-    std::unique_ptr<shiva::graphics::renderer> win_{sf::VideoMode(cfg_.size[0], cfg_.size[1]), cfg_.name};
+//    shiva::sfml::window_config cfg_;
+//    std::unique_ptr<shiva::graphics::renderer> win_{sf::VideoMode(cfg_.size[0], cfg_.size[1]), cfg_.name};
 
     bool debug_draw_{false};
 };

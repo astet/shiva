@@ -1,6 +1,10 @@
 set(MODULE_PATH
         ${CMAKE_CURRENT_SOURCE_DIR}/shiva/ecs)
 
+set(MODULE_PUBLIC_SOURCES
+        "${MODULE_PATH}/systems/move_system.cpp"
+        )
+
 set(MODULE_PUBLIC_HEADERS
         "${MODULE_PATH}/system.hpp"
         "${MODULE_PATH}/system_type.hpp"
@@ -15,6 +19,8 @@ set(MODULE_PUBLIC_HEADERS
         "${MODULE_PATH}/components/transform_2d.hpp"
         "${MODULE_PATH}/components/physics_2d.hpp"
         "${MODULE_PATH}/components/drawable.hpp"
+        "${MODULE_PATH}/systems/render_system.hpp"
+        "${MODULE_PATH}/systems/move_system.hpp"
         )
 
 set(MODULE_PRIVATE_HEADERS

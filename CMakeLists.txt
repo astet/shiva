@@ -25,7 +25,7 @@ option(SHIVA_INSTALL_PLUGINS "Build shiva with SFML rendering" OFF)
 option(DISABLE_INSTALL_SHIVA_CORE "Disable install main targets" OFF)
 option(USE_PROJECT_IN_AN_IDE "Workaround for install header only library option, put it to ON if u use CLION" OFF)
 option(SHIVA_BUILD_EDITOR "Shiva build editor" OFF)
-option(USE_TINYREFL_FOR_REFLECTION "Use tinyrefl for reflection" ON)
+option(USE_TINYREFL_FOR_REFLECTION "Use tinyrefl for reflection" OFF)
 
 
 ##! CMake Path
