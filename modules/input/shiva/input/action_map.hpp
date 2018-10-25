@@ -7,6 +7,8 @@
 #include <functional>
 #include <unordered_map>
 
+#include <shiva/range/range.hpp>
+
 #include "keyboard.hpp"
 
 namespace shiva::input {
@@ -29,7 +31,9 @@ namespace shiva::input {
         {
             using func = Cb_t<Args...>;
             std::unique_ptr<func> f1(new func(fp));
-            action_bindings.emplace(name, std::move(f1));
+            if (shiva::ranges::find_if(key_bindings_, [name](const auto& mo) {return mo.second == name; }) != key_bindings_.end()) {
+                action_bindings_.emplace(name, std::move(f1));
+            }
         }
 
         template<typename T, typename... Args>
@@ -37,35 +41,41 @@ namespace shiva::input {
         {
             using func = Cb_t<Args...>;
             std::unique_ptr<func> f1(new func(fp));
-            action_bindings.emplace(name, std::move(f1));
+            action_bindings_.emplace(name, std::move(f1));
+        }
+
+        void bind_action(TKey name, TKey group, keyboard::Key key)
+        {
+            key_bindings_[key] = name;
         }
 
         void bind_action(TKey name, keyboard::Key key)
         {
-            key_bindings[key] = name;
+            key_bindings_[key] = name;
         }
 
+        template<typename ...A>
+        inline void call(keyboard::Key key, A&& ... args)
+        {
+            if (auto it = key_bindings_.find(key); it != key_bindings_.end()) {
+                call(it->second, std::forward<A>(args)...);
+            }
+        }
+    private:
         template<typename ...A>
         void call(TKey name, A&& ... args)
         {
             using func_t = Cb_t<A...>;
             using cb_t = std::function<void(A...)>;
-            if (auto it = action_bindings.find(name); it != action_bindings.end()) {
+            if (auto it = action_bindings_.find(name); it != action_bindings_.end()) {
                 const Func_t &base = *it->second;
                 const cb_t &fun = static_cast<const func_t &>(base).callback;
                 fun(std::forward<A>(args)...);
             }
         }
 
-        template<typename ...A>
-        inline void call(keyboard::Key key, A&& ... args)
-        {
-            if (auto it = key_bindings.find(key); it != key_bindings.end()) {
-                call(it->second, std::forward<A>(args)...);
-            }
-        }
-    private:
-        std::unordered_map<keyboard::Key, TKey> key_bindings;
-        std::unordered_map<TKey, std::unique_ptr<Func_t>> action_bindings;
+        std::unordered_map<keyboard::Key, TKey> action_groups_;
+        std::unordered_map<keyboard::Key, TKey> key_bindings_;
+        std::unordered_map<TKey, std::unique_ptr<Func_t>> action_bindings_;
     };
 }
