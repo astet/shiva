@@ -8,6 +8,8 @@ set(MODULE_PUBLIC_HEADERS
         "${MODULE_PATH}/gamepad.hpp"
         "${MODULE_PATH}/action_map.hpp"
         "${MODULE_PATH}/input_action.hpp"
+        "${MODULE_PATH}/dispatcher.hpp"
+        "${MODULE_PATH}/input_registry.hpp"
         )
 
 set(MODULE_PRIVATE_HEADERS
